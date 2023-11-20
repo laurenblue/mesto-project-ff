@@ -1,6 +1,6 @@
 const contentContainer = document.querySelector(".places__list"); // DOM узлы
 
-function createCard(cardData, handleDeleteCard) {
+function createCard(cardData, handleDelete) {
   const template = document.querySelector("#card-template").content;
   const templateElement = template.querySelector(".card").cloneNode(true); //шаг 1: клонируем шаблон
 
@@ -9,7 +9,7 @@ function createCard(cardData, handleDeleteCard) {
   templateElement.querySelector(".card__image").alt = cardData.name; //шаг 3: устанавливаем значение вложенных элементов
 
   const deleteButton = templateElement.querySelector(".card__delete-button");
-  deleteButton.addEventListener("click", (e) => handleDeleteCard(e.target)); //шаг 4: добавляем обработчик по клику
+  deleteButton.addEventListener("click", (e) => handleDelete(e.target)); //шаг 4: добавляем обработчик по клику
 
   return templateElement;
 }
