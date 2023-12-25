@@ -1,4 +1,6 @@
 const contentContainer = document.querySelector(".places__list"); // DOM узлы
+import '../pages/index.css'; 
+import {initialCards} from './cards.js';
 
 function createCard(cardData, handleDelete) {
   const template = document.querySelector("#card-template").content;
