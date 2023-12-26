@@ -1,9 +1,13 @@
 function openPopup(popup) {
-  popup.style.display = "flex";
+  popup.classList.add("popup_is-animated");
+  popup.classList.add("popup_is-opened");
 }
 
 function closePopup(popup) {
-  popup.style.display = "none";
+  popup.classList.remove("popup_is-opened");
+  setTimeout(() => {
+    popup.classList.remove("popup_is-animated");
+  }, 300);
 }
 
 document.querySelectorAll(".popup__close").forEach((closeBtn) => {
