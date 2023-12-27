@@ -1,6 +1,4 @@
-import { handlePictureClick } from ".";
-
-function createCard(cardData, handleDelete) {
+function createCard(cardData, handleDelete, handleLike, handlePictureClick) {
   const template = document.querySelector("#card-template").content;
   const templateElement = template.querySelector(".card").cloneNode(true);
   const picture = templateElement.querySelector(".card__image");
@@ -25,9 +23,8 @@ function handleLike(likeButton) {
   likeButton.classList.toggle("card__like-button_is-active");
 }
 
-function handleDeleteCard(deleteButton) {
-  const item = deleteButton.closest(".card");
+function handleDeleteCard(item) {
   item.remove();
 }
 
-export { createCard, handleLike, handleDeleteCard };
+export { createCard, handleDeleteCard, handleLike };

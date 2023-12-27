@@ -3,7 +3,7 @@ import { initialCards } from "./cards.js";
 import { createCard, handleLike, handleDeleteCard } from "./card";
 import { closePopup, openPopup } from "./modal";
 
-const contentContainer = document.querySelector(".places__list"); 
+const contentContainer = document.querySelector(".places__list");
 const editButton = document.querySelector(".profile__edit-button");
 const addButton = document.querySelector(".profile__add-button");
 const editPopup = document.querySelector(".popup_type_edit");
@@ -24,7 +24,13 @@ function renderCard(createCard) {
 }
 
 initialCards.forEach((card) => {
-  renderCard(createCard(card, handleDeleteCard));
+  const cardElement = createCard(
+    card,
+    handleDeleteCard,
+    handleLike,
+    handlePictureClick
+  );
+  renderCard(cardElement);
 });
 
 function handleAddButtonClick() {
@@ -65,7 +71,12 @@ function updateProfile(evt) {
 formElement.addEventListener("submit", updateProfile);
 
 function addNewCard(cardData) {
-  const cardElement = createCard(cardData, handleDeleteCard);
+  const cardElement = createCard(
+    cardData,
+    handleDeleteCard,
+    handleLike,
+    handlePictureClick
+  );
   contentContainer.prepend(cardElement);
 }
 
