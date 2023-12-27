@@ -1,9 +1,9 @@
 import "../pages/index.css";
 import { initialCards } from "./cards.js";
-import { createCard } from "./card";
+import { createCard, handleLike, handleDeleteCard } from "./card";
 import { closePopup, openPopup } from "./modal";
 
-const contentContainer = document.querySelector(".places__list"); // DOM узлы
+const contentContainer = document.querySelector(".places__list"); 
 const editButton = document.querySelector(".profile__edit-button");
 const addButton = document.querySelector(".profile__add-button");
 const editPopup = document.querySelector(".popup_type_edit");
@@ -14,29 +14,40 @@ const profileName = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 const formElement = editPopup.querySelector(".popup__form");
 const newPlaceForm = addPopup.querySelector(".popup__form");
+const imagePopup = document.querySelector(".popup_type_image");
+const popupImage = imagePopup.querySelector(".popup__image");
+const popupCaption = imagePopup.querySelector(".popup__caption");
+const linkInput = newPlaceForm.querySelector(".popup__input_type_url");
 
 function renderCard(createCard) {
   contentContainer.prepend(createCard);
-}
-
-function handleDeleteCard(deleteButton) {
-  const item = deleteButton.closest(".card");
-  item.remove();
 }
 
 initialCards.forEach((card) => {
   renderCard(createCard(card, handleDeleteCard));
 });
 
-function handleButtonClick(button, popup) {
-  button.addEventListener("click", () => {
-    openPopup(popup);
-    newPlaceForm.reset();
-  });
+function handleAddButtonClick() {
+  openPopup(addPopup);
+  newPlaceForm.reset();
 }
 
-handleButtonClick(editButton, editPopup);
-handleButtonClick(addButton, addPopup);
+function handleEditButtonClick() {
+  openPopup(editPopup);
+  nameInput.value = profileName.textContent;
+  jobInput.value = profileDescription.textContent;
+}
+
+addButton.addEventListener("click", handleAddButtonClick);
+editButton.addEventListener("click", handleEditButtonClick);
+
+export function handlePictureClick(imageUrl, imageDescription) {
+  popupImage.src = imageUrl;
+  popupImage.alt = imageDescription;
+  popupCaption.textContent = imageDescription;
+
+  openPopup(imagePopup);
+}
 
 editButton.addEventListener("click", () => {
   openPopup(editPopup);
@@ -63,7 +74,6 @@ function handleNewPlaceFormSubmit(evt) {
   const placeNameInput = newPlaceForm.querySelector(
     ".popup__input_type_card-name"
   );
-  const linkInput = newPlaceForm.querySelector(".popup__input_type_url");
 
   const newCardData = {
     name: placeNameInput.value,
@@ -73,7 +83,5 @@ function handleNewPlaceFormSubmit(evt) {
   addNewCard(newCardData);
   closePopup(addPopup);
 }
-
-handleButtonClick(addButton, addPopup);
 
 newPlaceForm.addEventListener("submit", handleNewPlaceFormSubmit);
