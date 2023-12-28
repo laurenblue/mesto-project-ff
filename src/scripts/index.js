@@ -18,6 +18,9 @@ const imagePopup = document.querySelector(".popup_type_image");
 const popupImage = imagePopup.querySelector(".popup__image");
 const popupCaption = imagePopup.querySelector(".popup__caption");
 const linkInput = newPlaceForm.querySelector(".popup__input_type_url");
+const placeNameInput = newPlaceForm.querySelector(
+  ".popup__input_type_card-name"
+);
 
 function renderCard(createCard) {
   contentContainer.prepend(createCard);
@@ -82,9 +85,6 @@ function addNewCard(cardData) {
 
 function handleNewPlaceFormSubmit(evt) {
   evt.preventDefault();
-  const placeNameInput = newPlaceForm.querySelector(
-    ".popup__input_type_card-name"
-  );
 
   const newCardData = {
     name: placeNameInput.value,
