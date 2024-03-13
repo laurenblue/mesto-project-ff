@@ -2,14 +2,17 @@ import "../pages/index.css";
 import { initialCards } from "./cards.js";
 import { createCard, handleLike, handleDeleteCard } from "./card";
 import { closePopup, openPopup } from "./modal";
+import { clearValidation, enableValidation } from "./validation";
 
 const contentContainer = document.querySelector(".places__list");
 const editButton = document.querySelector(".profile__edit-button");
 const addButton = document.querySelector(".profile__add-button");
 const editPopup = document.querySelector(".popup_type_edit");
 const addPopup = document.querySelector(".popup_type_new-card");
-const nameInput = document.querySelector(".popup__input_type_name");
-const jobInput = document.querySelector(".popup__input_type_description");
+export const nameInput = document.querySelector(".popup__input_type_name");
+export const jobInput = document.querySelector(
+  ".popup__input_type_description"
+);
 const profileName = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 const formElement = editPopup.querySelector(".popup__form");
@@ -39,12 +42,14 @@ initialCards.forEach((card) => {
 function handleAddButtonClick() {
   openPopup(addPopup);
   newPlaceForm.reset();
+  enableValidation(validationConfig);
 }
 
 function handleEditButtonClick() {
   openPopup(editPopup);
   nameInput.value = profileName.textContent;
   jobInput.value = profileDescription.textContent;
+  enableValidation(validationConfig);
 }
 
 addButton.addEventListener("click", handleAddButtonClick);
@@ -96,3 +101,12 @@ function handleNewPlaceFormSubmit(evt) {
 }
 
 newPlaceForm.addEventListener("submit", handleNewPlaceFormSubmit);
+
+export const validationConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__input-error_visible",
+};
