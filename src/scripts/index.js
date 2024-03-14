@@ -1,10 +1,17 @@
 import "../pages/index.css";
-import { initialCards } from "./cards.js";
 import { createCard, handleLike, handleDeleteCard } from "./card";
 import { closePopup, openPopup } from "./modal";
 import { clearValidation, enableValidation } from "./validation";
+import {
+  getUserData,
+  getInitialCards,
+  getNewCard,
+  updateProfileInfo,
+} from "./api";
 
 const contentContainer = document.querySelector(".places__list");
+const profilePicture = document.querySelector(".profile__image");
+let userId = "";
 const editButton = document.querySelector(".profile__edit-button");
 const addButton = document.querySelector(".profile__add-button");
 const editPopup = document.querySelector(".popup_type_edit");
@@ -29,14 +36,26 @@ function renderCard(createCard) {
   contentContainer.prepend(createCard);
 }
 
-initialCards.forEach((card) => {
-  const cardElement = createCard(
-    card,
-    handleDeleteCard,
-    handleLike,
-    handlePictureClick
-  );
-  renderCard(cardElement);
+function changeProfile(user) {
+  profileName.textContent = user.name;
+  profileDescription.textContent = user.about;
+  profilePicture.style.backgroundImage = `url(${user.avatar})`;
+  updateProfileInfo();
+}
+
+Promise.all([getInitialCards(), getUserData()]).then(([cards, user]) => {
+  changeProfile(user);
+  userId = user._id;
+  cards.forEach((card) => {
+    const cardElement = createCard(
+      card,
+      handleDeleteCard,
+      handleLike,
+      handlePictureClick,
+      userId
+    );
+    renderCard(cardElement);
+  });
 });
 
 function handleAddButtonClick() {
@@ -83,7 +102,8 @@ function addNewCard(cardData) {
     cardData,
     handleDeleteCard,
     handleLike,
-    handlePictureClick
+    handlePictureClick,
+    userId
   );
   contentContainer.prepend(cardElement);
 }
@@ -94,7 +114,9 @@ function handleNewPlaceFormSubmit(evt) {
   const newCardData = {
     name: placeNameInput.value,
     link: linkInput.value,
+    _id: userId,
   };
+  getNewCard(card);
 
   addNewCard(newCardData);
   closePopup(addPopup);
