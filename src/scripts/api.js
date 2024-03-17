@@ -40,16 +40,16 @@ const getNewCard = (name, link) => {
 };
 
 const updateProfileInfo = (name, about) => {
-    return fetch(`${auth.baseUrl}/users/me`, {
-      method: "PATCH",
-      headers: auth.headers,
-      body: JSON.stringify({
-        name: name,
-        about: about
-      }),
-    }).then(checkResponse);
-  };
-  
+  return fetch(`${auth.baseUrl}/users/me`, {
+    method: "PATCH",
+    headers: auth.headers,
+    body: JSON.stringify({
+      name: name,
+      about: about,
+    }),
+  }).then(checkResponse);
+};
+
 const removeCard = (cardId) => {
   return fetch(`${auth.baseUrl}/cards/${cardId}`, {
     method: "DELETE",
@@ -81,4 +81,13 @@ const changePfofilePic = (profilepic) => {
   }).then(checkResponse);
 };
 
-export { getUserData, getInitialCards, getNewCard, updateProfileInfo, changePfofilePic, showLike, hideLike, removeCard };
+export {
+  getUserData,
+  getInitialCards,
+  getNewCard,
+  updateProfileInfo,
+  changePfofilePic,
+  showLike,
+  hideLike,
+  removeCard,
+};

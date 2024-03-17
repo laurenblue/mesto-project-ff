@@ -1,17 +1,46 @@
-function createCard(cardData, handleDelete, handleLike, handlePictureClick) {
+function createCard(
+  cardData,
+  handleDelete,
+  handleLike,
+  handlePictureClick,
+  userId,
+  likeCounter,
+  showLike,
+  hideLike
+) {
   const template = document.querySelector("#card-template").content;
   const templateElement = template.querySelector(".card").cloneNode(true);
   const picture = templateElement.querySelector(".card__image");
   templateElement.querySelector(".card__title").textContent = cardData.name;
+  const likesContainer = templateElement.querySelector(".likes");
   picture.src = cardData.link;
   picture.alt = cardData.name;
-
+  likesContainer.textContent = likeCounter;
   const deleteButton = templateElement.querySelector(".card__delete-button");
   deleteButton.addEventListener("click", () => handleDelete(templateElement));
 
-  const likeButton = templateElement.querySelector(".card__like-button");
-  likeButton.addEventListener("click", () => handleLike(likeButton));
+  const like = templateElement.querySelector(".card__like-button");
 
+  const likeButton = () => {
+    if (like.classList.contains("card__like-button_is-active")) {
+      handleLike(like);
+      hideLike(cardData._id).then((res) => {
+        likesContainer.textContent = res.likes.length;
+      });
+    } else {
+      handleLike(like);
+      showLike(cardData._id).then((res) => {
+        likesContainer.textContent = res.likes.length;
+      });
+    }
+  };
+
+  Array.from(cardData.likes).forEach((item) => {
+    if (item._id === userId) {
+      handleLike(like);
+    }
+  });
+  like.addEventListener("click", likeButton);
   picture.addEventListener("click", () =>
     handlePictureClick(cardData.link, cardData.name)
   );
@@ -19,8 +48,8 @@ function createCard(cardData, handleDelete, handleLike, handlePictureClick) {
   return templateElement;
 }
 
-function handleLike(likeButton) {
-  likeButton.classList.toggle("card__like-button_is-active");
+function handleLike(like) {
+  like.classList.toggle("card__like-button_is-active");
 }
 
 function handleDeleteCard(item) {

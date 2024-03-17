@@ -7,12 +7,14 @@ import {
   getInitialCards,
   getNewCard,
   updateProfileInfo,
-
+  showLike,
+  hideLike,
 } from "./api";
 
 const contentContainer = document.querySelector(".places__list");
 const profilePicture = document.querySelector(".profile__image");
 let userId = "";
+let likeCounter = 0;
 const editButton = document.querySelector(".profile__edit-button");
 const addButton = document.querySelector(".profile__add-button");
 const editPopup = document.querySelector(".popup_type_edit");
@@ -43,23 +45,28 @@ function renameProfile(user) {
   profilePicture.style.backgroundImage = `url(${user.avatar})`;
 }
 
-Promise.all([getInitialCards(), getUserData()]).then(([cards, user]) => {
-  renameProfile(user);
-  userId = user._id;
-  cards.forEach((card) => {
-    const cardElement = createCard(
-      card,
-      handleDeleteCard,
-      handleLike,
-      handlePictureClick,
-      userId
-    );
-    renderCard(cardElement);
+Promise.all([getInitialCards(), getUserData()])
+  .then(([cards, user]) => {
+    renameProfile(user);
+    userId = user._id;
+    cards.forEach((card) => {
+      likeCounter = card.likes.length;
+      const cardElement = createCard(
+        card,
+        handleDeleteCard,
+        handleLike,
+        handlePictureClick,
+        userId,
+        likeCounter,
+        showLike,
+        hideLike
+      );
+      renderCard(cardElement);
+    });
+  })
+  .catch((error) => {
+    console.error("Ошибка загрузки информации о пользователе:", error);
   });
-}).catch(error => {
-  console.error('Ошибка загрузки информации о пользователе:', error);
-});
-
 
 function handleAddButtonClick() {
   openPopup(addPopup);
@@ -99,13 +106,13 @@ function updateProfile(evt) {
   profileName.textContent = newName;
   profileDescription.textContent = newAbout;
   updateProfileInfo(newName, newAbout)
-  .then((userData) => {
-    // Обработка успешного обновления профиля
-    console.log('Профиль успешно обновлен:', userData);
-  })
-  .catch((error) => {
-    console.error('Ошибка при обновлении профиля:', error);
-  });
+    .then((userData) => {
+      // Обработка успешного обновления профиля
+      console.log("Профиль успешно обновлен:", userData);
+    })
+    .catch((error) => {
+      console.error("Ошибка при обновлении профиля:", error);
+    });
   closePopup(editPopup);
 }
 
@@ -117,7 +124,10 @@ function addNewCard(cardData, userId) {
     handleDeleteCard,
     handleLike,
     handlePictureClick,
-    userId
+    userId,
+    likeCounter,
+    showLike,
+    hideLike
   );
   contentContainer.prepend(cardElement);
 }
@@ -131,13 +141,13 @@ function handleNewPlaceFormSubmit(evt) {
     _id: userId,
   };
   getNewCard(newCardData.name, newCardData.link)
-  .then((card) => {
-    addNewCard(card, userId);
-    closePopup(addPopup);
-  })
-  .catch((error) => {
-    console.error('Ошибка при добавлении новой карточки:', error);
-  });
+    .then((card) => {
+      addNewCard(card, userId);
+      closePopup(addPopup);
+    })
+    .catch((error) => {
+      console.error("Ошибка при добавлении новой карточки:", error);
+    });
 }
 
 newPlaceForm.addEventListener("submit", handleNewPlaceFormSubmit);
