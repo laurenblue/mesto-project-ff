@@ -7,6 +7,7 @@ import {
   getInitialCards,
   getNewCard,
   updateProfileInfo,
+
 } from "./api";
 
 const contentContainer = document.querySelector(".places__list");
@@ -36,15 +37,14 @@ function renderCard(createCard) {
   contentContainer.prepend(createCard);
 }
 
-function changeProfile(user) {
+function renameProfile(user) {
   profileName.textContent = user.name;
   profileDescription.textContent = user.about;
   profilePicture.style.backgroundImage = `url(${user.avatar})`;
-  updateProfileInfo();
 }
 
 Promise.all([getInitialCards(), getUserData()]).then(([cards, user]) => {
-  changeProfile(user);
+  renameProfile(user);
   userId = user._id;
   cards.forEach((card) => {
     const cardElement = createCard(
@@ -56,7 +56,10 @@ Promise.all([getInitialCards(), getUserData()]).then(([cards, user]) => {
     );
     renderCard(cardElement);
   });
+}).catch(error => {
+  console.error('Ошибка загрузки информации о пользователе:', error);
 });
+
 
 function handleAddButtonClick() {
   openPopup(addPopup);
@@ -90,14 +93,25 @@ editButton.addEventListener("click", () => {
 
 function updateProfile(evt) {
   evt.preventDefault();
-  profileName.textContent = nameInput.value;
-  profileDescription.textContent = jobInput.value;
+  const newName = nameInput.value;
+  const newAbout = jobInput.value;
+
+  profileName.textContent = newName;
+  profileDescription.textContent = newAbout;
+  updateProfileInfo(newName, newAbout)
+  .then((userData) => {
+    // Обработка успешного обновления профиля
+    console.log('Профиль успешно обновлен:', userData);
+  })
+  .catch((error) => {
+    console.error('Ошибка при обновлении профиля:', error);
+  });
   closePopup(editPopup);
 }
 
 formElement.addEventListener("submit", updateProfile);
 
-function addNewCard(cardData) {
+function addNewCard(cardData, userId) {
   const cardElement = createCard(
     cardData,
     handleDeleteCard,
@@ -116,10 +130,14 @@ function handleNewPlaceFormSubmit(evt) {
     link: linkInput.value,
     _id: userId,
   };
-  getNewCard(card);
-
-  addNewCard(newCardData);
-  closePopup(addPopup);
+  getNewCard(newCardData.name, newCardData.link)
+  .then((card) => {
+    addNewCard(card, userId);
+    closePopup(addPopup);
+  })
+  .catch((error) => {
+    console.error('Ошибка при добавлении новой карточки:', error);
+  });
 }
 
 newPlaceForm.addEventListener("submit", handleNewPlaceFormSubmit);
