@@ -71,7 +71,7 @@ const hideLike = (cardId) => {
   }).then(checkResponse);
 };
 
-const changePfofilePic = (profilepic) => {
+const changeProfilePic = (profilepic) => {
   return fetch(`${auth.baseUrl}/users/me/avatar`, {
     method: "PATCH",
     headers: auth.headers,
@@ -86,7 +86,7 @@ export {
   getInitialCards,
   getNewCard,
   updateProfileInfo,
-  changePfofilePic,
+  changeProfilePic,
   showLike,
   hideLike,
   removeCard,

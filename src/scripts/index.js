@@ -9,8 +9,12 @@ import {
   updateProfileInfo,
   showLike,
   hideLike,
+  changeProfilePic,
 } from "./api";
 
+const editAvatarButton = document.querySelector(".profile__edit-avatar");
+const editAvatarPopup = document.querySelector(".popup_type_avatar");
+const avatarForm = editAvatarPopup.querySelector(".popup__form");
 const contentContainer = document.querySelector(".places__list");
 const profilePicture = document.querySelector(".profile__image");
 let userId = "";
@@ -34,6 +38,28 @@ const linkInput = newPlaceForm.querySelector(".popup__input_type_url");
 const placeNameInput = newPlaceForm.querySelector(
   ".popup__input_type_card-name"
 );
+
+editAvatarButton.addEventListener("click", () => {
+  openPopup(editAvatarPopup);
+});
+
+avatarForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const avatarUrl = avatarForm.querySelector("#avatar").value;
+  const saveButton = formElement.querySelector(".popup__button");
+  saveButton.textContent = "Сохранение...";
+  changeProfilePic(avatarUrl)
+    .then((userData) => {
+      console.log("Аватар успешно изменен:", userData);
+      saveButton.textContent = "Сохранить";
+      closePopup(editAvatarPopup);
+    })
+    .catch((error) => {
+      console.error("Ошибка при смене аватара:", error);
+      saveButton.textContent = "Сохранить";
+    });
+});
 
 function renderCard(createCard) {
   contentContainer.prepend(createCard);
@@ -102,16 +128,19 @@ function updateProfile(evt) {
   evt.preventDefault();
   const newName = nameInput.value;
   const newAbout = jobInput.value;
-
   profileName.textContent = newName;
   profileDescription.textContent = newAbout;
+  const saveButton = formElement.querySelector(".popup__button");
+saveButton.textContent = "Сохранение...";
   updateProfileInfo(newName, newAbout)
     .then((userData) => {
       // Обработка успешного обновления профиля
       console.log("Профиль успешно обновлен:", userData);
+      saveButton.textContent = "Сохранить";
     })
     .catch((error) => {
       console.error("Ошибка при обновлении профиля:", error);
+      saveButton.textContent = "Сохранить";
     });
   closePopup(editPopup);
 }
