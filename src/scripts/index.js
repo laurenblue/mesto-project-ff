@@ -1,7 +1,7 @@
 import "../pages/index.css";
 import { createCard, handleLike, handleDeleteCard } from "./card";
 import { closePopup, openPopup } from "./modal";
-import { clearValidation, enableValidation } from "./validation";
+import { enableValidation } from "./validation";
 import {
   getUserData,
   getInitialCards,
@@ -147,7 +147,6 @@ function updateProfile(evt) {
   saveButton.textContent = "Сохранение...";
   updateProfileInfo(newName, newAbout)
     .then((userData) => {
-      // Обработка успешного обновления профиля
       console.log("Профиль успешно обновлен:", userData);
       saveButton.textContent = "Сохранить";
     })
