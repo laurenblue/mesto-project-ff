@@ -10,6 +10,7 @@ import {
   showLike,
   hideLike,
   changeProfilePic,
+  removeCard,
 } from "./api";
 
 const editAvatarButton = document.querySelector(".profile__edit-avatar");
@@ -64,6 +65,18 @@ avatarForm.addEventListener("submit", (event) => {
 function renderCard(createCard) {
   contentContainer.prepend(createCard);
 }
+
+export const deletePic = (button, itemId, card) => {
+  button.addEventListener("click", () => {
+    removeCard(itemId)
+      .then(() => {
+        card.remove();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+};
 
 function renameProfile(user) {
   profileName.textContent = user.name;
@@ -131,7 +144,7 @@ function updateProfile(evt) {
   profileName.textContent = newName;
   profileDescription.textContent = newAbout;
   const saveButton = formElement.querySelector(".popup__button");
-saveButton.textContent = "Сохранение...";
+  saveButton.textContent = "Сохранение...";
   updateProfileInfo(newName, newAbout)
     .then((userData) => {
       // Обработка успешного обновления профиля

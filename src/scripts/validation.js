@@ -70,16 +70,6 @@ function enableValidation(validationConfig) {
   });
 }
 
-function clearValidation(formElement, validationConfig) {
-  const { inputSelector, submitButtonSelector } = validationConfig;
-  const inputList = Array.from(formElement.querySelectorAll(inputSelector));
-  const buttonElement = formElement.querySelector(submitButtonSelector);
-  inputList.forEach((inputElement) => {
-    hideInputError(formElement, inputElement, validationConfig);
-  });
-  toggleButtonState(inputList, buttonElement, validationConfig);
-}
-
 function toggleButtonState(inputList, buttonElement, validationConfig) {
   const { inactiveButtonClass } = validationConfig;
   if (hasInvalidInput(inputList)) {
@@ -91,4 +81,4 @@ function toggleButtonState(inputList, buttonElement, validationConfig) {
   }
 }
 
-export { enableValidation, clearValidation };
+export { enableValidation };

@@ -1,3 +1,5 @@
+import { deletePic } from ".";
+
 function createCard(
   cardData,
   handleDelete,
@@ -15,9 +17,13 @@ function createCard(
   const likesContainer = templateElement.querySelector(".likes");
   picture.src = cardData.link;
   picture.alt = cardData.name;
+  const itemId = cardData._id;
   likesContainer.textContent = likeCounter;
   const deleteButton = templateElement.querySelector(".card__delete-button");
-  deleteButton.addEventListener("click", () => handleDelete(templateElement));
+  if (cardData.owner._id === userId) {
+    deleteButton.classList.add("card__delete-button_active");
+  }
+  deletePic(deleteButton, itemId, templateElement);
 
   const like = templateElement.querySelector(".card__like-button");
 
