@@ -8,6 +8,17 @@
   background-position: center;
   margin: 0 29px 0 0;
   background-image: url(../../../images/avatar.jpg);
+  cursor: pointer;
+    transition: opacity 0.5s ease 0s;
+}
+
+.profile__image:hover {
+  opacity: 0.2;
+}
+
+.profile__image:hover + .profile__edit-avatar {
+  display: block;
+  background: none;
 }
 
 @media screen and (max-width: 740px) {
