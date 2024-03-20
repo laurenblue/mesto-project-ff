@@ -39,6 +39,7 @@ const newPlaceForm = addPopup.querySelector(".popup__form");
 const imagePopup = document.querySelector(".popup_type_image");
 const popupImage = imagePopup.querySelector(".popup__image");
 const popupCaption = imagePopup.querySelector(".popup__caption");
+const avatarLink = avatarForm.querySelector('.popup__input_type_avatar');
 const linkInput = newPlaceForm.querySelector(".popup__input_type_url");
 const placeNameInput = newPlaceForm.querySelector(
   ".popup__input_type_card-name"
@@ -48,7 +49,7 @@ function changeButtonCaption(buttonElement, caption) {
   buttonElement.textContent = caption;
 }
 
-editAvatarButton.addEventListener("click", () => {
+/*editAvatarButton.addEventListener("click", () => {
   openPopup(editAvatarPopup);
   clearValidation(avatarForm, validationConfig);
 });
@@ -68,7 +69,7 @@ avatarForm.addEventListener("submit", (event) => {
     .finally(() => {
       changeButtonCaption(buttonAvatar, originalButton);
     });
-});
+});*/
 
 function renderCard(createCard) {
   contentContainer.prepend(createCard);
@@ -117,8 +118,15 @@ function handleEditButtonClick() {
   enableValidation(validationConfig);
 }
 
+function handleEditAvatarClick() {
+  openPopup(editAvatarPopup);
+  avatarLink.value = '';
+  enableValidation(validationConfig);
+}
+
 addButton.addEventListener("click", handleAddButtonClick);
 editButton.addEventListener("click", handleEditButtonClick);
+editAvatarButton.addEventListener('click', handleEditAvatarClick);
 
 export function handlePictureClick(imageUrl, imageDescription) {
   popupImage.src = imageUrl;
@@ -134,6 +142,30 @@ editButton.addEventListener("click", () => {
   jobInput.value = profileDescription.textContent;
   clearValidation(editPopup, validationConfig);
 });
+
+editAvatarButton.addEventListener("click", () => {
+  openPopup(editAvatarPopup);
+  clearValidation(editAvatarPopup, validationConfig);
+});
+
+function handleAvatarFormSubmit(event) {
+  event.preventDefault();
+  const avatarUrl = avatarLink.value;
+  changeButtonCaption(buttonAvatar, caption);
+  changeProfilePic(avatarUrl)
+    .then((userData) => {
+      console.log("Аватар успешно изменен:", userData);
+      closePopup(editAvatarPopup);
+    }) 
+    .catch((error) => {
+      console.error("Ошибка при смене аватара:", error);
+    })
+    .finally(() => {
+      changeButtonCaption(buttonAvatar, originalButton);
+    });
+}
+
+avatarForm.addEventListener("submit", handleAvatarFormSubmit);
 
 function updateProfile(evt) {
   evt.preventDefault();

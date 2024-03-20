@@ -51,7 +51,7 @@
           <button type="button" class="popup__close"></button>
           <h3 class="popup__title">Обновить аватар</h3>
             <form class="popup__form" name="edit-avatar" novalidate>
-                <label for="avatar"><input class="popup__input popup__input_type_avatar" type="url" name="avatar" id="avatar" placeholder="Ссылка на картинку" required style="border-bottom: 1px solid red;">
+                <label for="avatar"><input class="popup__input popup__input_type_avatar" type="url" name="avatar" id="avatar-input" placeholder="Ссылка на картинку" required style="border-bottom: 1px solid red;">
                     <span class="popup__input-error_visible avatar-input-error"> </span>
                 </label>  
                 <button type="submit" class="button popup__button">Сохранить</button>                     
@@ -110,6 +110,8 @@
               placeholder="Название"
               minlength="2"
               maxlength="40"
+              pattern="^[a-zA-Zа-яА-Я\s]+$"
+              data-error-message="Поле может содержать только латинские и кириллические буквы, знаки дефиса и пробелы."
               required
             />
             <span
