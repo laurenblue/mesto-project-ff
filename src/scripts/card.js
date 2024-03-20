@@ -1,14 +1,13 @@
-import { deletePic } from ".";
-
 function createCard(
   cardData,
-  handleDelete,
+  handleDeleteCard,
   handleLike,
   handlePictureClick,
   userId,
   likeCounter,
   showLike,
-  hideLike
+  hideLike,
+  removeCard
 ) {
   const template = document.querySelector("#card-template").content;
   const templateElement = template.querySelector(".card").cloneNode(true);
@@ -22,22 +21,34 @@ function createCard(
   const deleteButton = templateElement.querySelector(".card__delete-button");
   if (cardData.owner._id === userId) {
     deleteButton.classList.add("card__delete-button_active");
+    deleteButton.addEventListener("click", () => handleDeleteCard(deleteButton, itemId, templateElement, removeCard));
   }
-  deletePic(deleteButton, itemId, templateElement);
 
   const like = templateElement.querySelector(".card__like-button");
 
   const likeButton = () => {
-    if (like.classList.contains("card__like-button_is-active")) {
-      handleLike(like);
-      hideLike(cardData._id).then((res) => {
-        likesContainer.textContent = res.likes.length;
-      });
-    } else {
-      handleLike(like);
-      showLike(cardData._id).then((res) => {
-        likesContainer.textContent = res.likes.length;
-      });
+    const previousState = like.classList.contains("card__like-button_is-active");
+    handleLike(like);
+    if (previousState !== like.classList.contains("card__like-button_is-active")) {
+      if (previousState) {
+        hideLike(cardData._id)
+          .then((res) => {
+            likesContainer.textContent = res.likes.length;
+          })
+          .catch((err) => {
+            console.error(err);
+            handleLike(like); 
+          });
+      } else {
+        showLike(cardData._id)
+          .then((res) => {
+            likesContainer.textContent = res.likes.length;
+          })
+          .catch((err) => {
+            console.error(err);
+            handleLike(like)
+          });
+      }
     }
   };
 
@@ -58,8 +69,18 @@ function handleLike(like) {
   like.classList.toggle("card__like-button_is-active");
 }
 
-function handleDeleteCard(item) {
-  item.remove();
+function handleDeleteCard(button, itemId, templateElement, removeCard) {
+  button.addEventListener("click", () => {
+    removeCard(itemId)
+      .then(() => {
+        templateElement.remove();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
 }
+
+
 
 export { createCard, handleDeleteCard, handleLike };

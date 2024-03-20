@@ -1,7 +1,7 @@
 import "../pages/index.css";
 import { createCard, handleLike, handleDeleteCard } from "./card";
 import { closePopup, openPopup } from "./modal";
-import { enableValidation } from "./validation";
+import { enableValidation, clearValidation } from "./validation";
 import {
   getUserData,
   getInitialCards,
@@ -10,12 +10,13 @@ import {
   showLike,
   hideLike,
   changeProfilePic,
-  removeCard,
+  removeCard
 } from "./api";
 
 const editAvatarButton = document.querySelector(".profile__edit-avatar");
 const editAvatarPopup = document.querySelector(".popup_type_avatar");
 const avatarForm = editAvatarPopup.querySelector(".popup__form");
+const buttonAvatar = avatarForm.querySelector('.popup__button');
 const contentContainer = document.querySelector(".places__list");
 const profilePicture = document.querySelector(".profile__image");
 let userId = "";
@@ -30,7 +31,10 @@ export const jobInput = document.querySelector(
 );
 const profileName = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
-const formElement = editPopup.querySelector(".popup__form");
+const editForm = editPopup.querySelector(".popup__form");
+const editFormPopupButton = editForm.querySelector('.popup__button');
+const originalButton = editFormPopupButton.textContent;
+const caption = 'Сохранение...';
 const newPlaceForm = addPopup.querySelector(".popup__form");
 const imagePopup = document.querySelector(".popup_type_image");
 const popupImage = imagePopup.querySelector(".popup__image");
@@ -40,25 +44,29 @@ const placeNameInput = newPlaceForm.querySelector(
   ".popup__input_type_card-name"
 );
 
+function changeButtonCaption(buttonElement, caption) {
+  buttonElement.textContent = caption;
+}
+
 editAvatarButton.addEventListener("click", () => {
   openPopup(editAvatarPopup);
+  clearValidation(avatarForm, validationConfig);
 });
 
 avatarForm.addEventListener("submit", (event) => {
   event.preventDefault();
-
   const avatarUrl = avatarForm.querySelector("#avatar").value;
-  const saveButton = formElement.querySelector(".popup__button");
-  saveButton.textContent = "Сохранение...";
+  changeButtonCaption(buttonAvatar, caption);
   changeProfilePic(avatarUrl)
     .then((userData) => {
       console.log("Аватар успешно изменен:", userData);
-      saveButton.textContent = "Сохранить";
       closePopup(editAvatarPopup);
     })
     .catch((error) => {
       console.error("Ошибка при смене аватара:", error);
-      saveButton.textContent = "Сохранить";
+    })
+    .finally(() => {
+      changeButtonCaption(buttonAvatar, originalButton);
     });
 });
 
@@ -66,17 +74,6 @@ function renderCard(createCard) {
   contentContainer.prepend(createCard);
 }
 
-export const deletePic = (button, itemId, card) => {
-  button.addEventListener("click", () => {
-    removeCard(itemId)
-      .then(() => {
-        card.remove();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
-};
 
 function renameProfile(user) {
   profileName.textContent = user.name;
@@ -88,17 +85,18 @@ Promise.all([getInitialCards(), getUserData()])
   .then(([cards, user]) => {
     renameProfile(user);
     userId = user._id;
-    cards.forEach((card) => {
-      likeCounter = card.likes.length;
+    cards.forEach((cardData) => {
+      likeCounter = cardData.likes.length;
       const cardElement = createCard(
-        card,
+        cardData,
         handleDeleteCard,
         handleLike,
         handlePictureClick,
         userId,
         likeCounter,
         showLike,
-        hideLike
+        hideLike,
+        removeCard 
       );
       renderCard(cardElement);
     });
@@ -135,6 +133,7 @@ editButton.addEventListener("click", () => {
   openPopup(editPopup);
   nameInput.value = profileName.textContent;
   jobInput.value = profileDescription.textContent;
+  clearValidation(editPopup, validationConfig);
 });
 
 function updateProfile(evt) {
@@ -143,7 +142,7 @@ function updateProfile(evt) {
   const newAbout = jobInput.value;
   profileName.textContent = newName;
   profileDescription.textContent = newAbout;
-  const saveButton = formElement.querySelector(".popup__button");
+  const saveButton = editForm.querySelector(".popup__button");
   saveButton.textContent = "Сохранение...";
   updateProfileInfo(newName, newAbout)
     .then((userData) => {
@@ -157,7 +156,7 @@ function updateProfile(evt) {
   closePopup(editPopup);
 }
 
-formElement.addEventListener("submit", updateProfile);
+editForm.addEventListener("submit", updateProfile);
 
 function addNewCard(cardData, userId) {
   const cardElement = createCard(
@@ -168,7 +167,8 @@ function addNewCard(cardData, userId) {
     userId,
     likeCounter,
     showLike,
-    hideLike
+    hideLike,
+    removeCard
   );
   contentContainer.prepend(cardElement);
 }

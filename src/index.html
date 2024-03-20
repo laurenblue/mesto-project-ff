@@ -22,11 +22,7 @@
         <section class="profile page__section">
           <button class="profile__avatar-container">
             <div class="profile__image"></div>
-            <img
-              class="profile__edit-avatar"
-              src="<%=require('./images/edit-icon.svg')%>"
-              alt="edit"
-            />
+            <img class="profile__edit-avatar" src="<%=require('./images/edit-icon.svg')%>" alt="edit">
           </button>
           <div class="profile__info">
             <h1 class="profile__title">Жак-Ив Кусто</h1>
@@ -54,26 +50,14 @@
         <div class="popup__content">
           <button type="button" class="popup__close"></button>
           <h3 class="popup__title">Обновить аватар</h3>
-          <form class="popup__form" name="edit-avatar" novalidate>
-            <label for="avatar"
-              ><input
-                class="popup__input popup__input_type_avatar"
-                type="url"
-                name="avatar"
-                id="avatar"
-                placeholder="Ссылка на картинку"
-                required
-                style="border-bottom: 1px solid red"
-              />
-              <span class="popup__input-error_visible avatar-input-error">
-              </span>
-            </label>
-            <button type="submit" class="button popup__button">
-              Сохранить
-            </button>
-          </form>
+            <form class="popup__form" name="edit-avatar" novalidate>
+                <label for="avatar"><input class="popup__input popup__input_type_avatar" type="url" name="avatar" id="avatar" placeholder="Ссылка на картинку" required style="border-bottom: 1px solid red;">
+                    <span class="popup__input-error_visible avatar-input-error"> </span>
+                </label>  
+                <button type="submit" class="button popup__button">Сохранить</button>                     
+            </form>
         </div>
-      </div>
+    </div>
       <div class="popup popup_type_edit">
         <div class="popup__content">
           <button type="button" class="popup__close"></button>
@@ -128,7 +112,9 @@
               maxlength="40"
               required
             />
-            <span class="popup__input-error_visible place-input-error"></span>
+            <span
+            class="popup__input-error_visible place-input-error"
+          ></span>
             <input
               type="url"
               name="link"
@@ -137,7 +123,9 @@
               placeholder="Ссылка на картинку"
               required
             />
-            <span class="popup__input-error_visible url-input-error"></span>
+            <span
+            class="popup__input-error_visible url-input-error"
+          ></span>
             <button type="submit" class="button popup__button">
               Сохранить
             </button>

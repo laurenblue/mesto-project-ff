@@ -1,5 +1,7 @@
 function openPopup(popup) {
-  popup.classList.add("popup_is-animated");
+  if (!popup.classList.contains("popup_is-animated")) {
+    popup.classList.add("popup_is-animated");
+  }
   popup.classList.add("popup_is-opened");
   document.addEventListener("keydown", closeByEsc);
 }
@@ -9,8 +11,9 @@ function closePopup(popup) {
   setTimeout(() => {
     popup.classList.remove("popup_is-animated");
   }, 300);
-  document.addEventListener("keydown", closeByEsc);
+  document.removeEventListener("keydown", closeByEsc); // Удаление обработчика события
 }
+
 
 function closeByEsc(evt) {
   if (evt.key === "Escape") {
