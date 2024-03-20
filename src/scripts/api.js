@@ -71,12 +71,12 @@ const hideLike = (cardId) => {
   }).then(checkResponse);
 };
 
-const changeProfilePic = (profilepic) => {
+const changeProfilePic = (url) => {
   return fetch(`${auth.baseUrl}/users/me/avatar`, {
     method: "PATCH",
     headers: auth.headers,
     body: JSON.stringify({
-      avatar: profilepic,
+      avatar: url,
     }),
   }).then(checkResponse);
 };

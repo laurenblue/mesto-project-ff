@@ -10,13 +10,13 @@ import {
   showLike,
   hideLike,
   changeProfilePic,
-  removeCard
+  removeCard,
 } from "./api";
 
 const editAvatarButton = document.querySelector(".profile__edit-avatar");
 const editAvatarPopup = document.querySelector(".popup_type_avatar");
 const avatarForm = editAvatarPopup.querySelector(".popup__form");
-const buttonAvatar = avatarForm.querySelector('.popup__button');
+const buttonAvatar = avatarForm.querySelector(".popup__button");
 const contentContainer = document.querySelector(".places__list");
 const profilePicture = document.querySelector(".profile__image");
 let userId = "";
@@ -32,9 +32,9 @@ export const jobInput = document.querySelector(
 const profileName = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 const editForm = editPopup.querySelector(".popup__form");
-const editFormPopupButton = editForm.querySelector('.popup__button');
+const editFormPopupButton = editForm.querySelector(".popup__button");
 const originalButton = editFormPopupButton.textContent;
-const caption = 'Сохранение...';
+const caption = "Сохранение...";
 const newPlaceForm = addPopup.querySelector(".popup__form");
 const imagePopup = document.querySelector(".popup_type_image");
 const popupImage = imagePopup.querySelector(".popup__image");
@@ -74,7 +74,6 @@ function renderCard(createCard) {
   contentContainer.prepend(createCard);
 }
 
-
 function renameProfile(user) {
   profileName.textContent = user.name;
   profileDescription.textContent = user.about;
@@ -96,7 +95,7 @@ Promise.all([getInitialCards(), getUserData()])
         likeCounter,
         showLike,
         hideLike,
-        removeCard 
+        removeCard
       );
       renderCard(cardElement);
     });
@@ -142,18 +141,18 @@ function updateProfile(evt) {
   const newAbout = jobInput.value;
   profileName.textContent = newName;
   profileDescription.textContent = newAbout;
-  const saveButton = editForm.querySelector(".popup__button");
-  saveButton.textContent = "Сохранение...";
+  changeButtonCaption(editFormPopupButton, caption);
   updateProfileInfo(newName, newAbout)
     .then((userData) => {
       console.log("Профиль успешно обновлен:", userData);
-      saveButton.textContent = "Сохранить";
+      closePopup(editPopup);
     })
     .catch((error) => {
       console.error("Ошибка при обновлении профиля:", error);
-      saveButton.textContent = "Сохранить";
+    })
+    .finally(() => {
+      changeButtonCaption(editFormPopupButton, originalButton);
     });
-  closePopup(editPopup);
 }
 
 editForm.addEventListener("submit", updateProfile);
@@ -181,6 +180,7 @@ function handleNewPlaceFormSubmit(evt) {
     link: linkInput.value,
     _id: userId,
   };
+  changeButtonCaption(newPlacePopupButton, caption);
   getNewCard(newCardData.name, newCardData.link)
     .then((card) => {
       addNewCard(card, userId);
@@ -188,6 +188,9 @@ function handleNewPlaceFormSubmit(evt) {
     })
     .catch((error) => {
       console.error("Ошибка при добавлении новой карточки:", error);
+    })
+    .finally(() => {
+      changeButtonCaption(newPlacePopupButton, originalButton);
     });
 }
 
