@@ -4,7 +4,6 @@ function createCard(
   handleLike,
   handlePictureClick,
   userId,
-  likeCounter,
   showLike,
   hideLike,
   removeCard
@@ -17,6 +16,7 @@ function createCard(
   picture.src = cardData.link;
   picture.alt = cardData.name;
   const itemId = cardData._id;
+  const likeCounter = cardData.likes.length;
   likesContainer.textContent = likeCounter;
   const deleteButton = templateElement.querySelector(".card__delete-button");
   if (cardData.owner._id === userId) {
@@ -75,6 +75,7 @@ function handleLike(like) {
   like.classList.toggle("card__like-button_is-active");
 }
 
+/*удаление*/
 function handleDeleteCard(button, itemId, templateElement, removeCard) {
   button.addEventListener("click", () => {
     removeCard(itemId)

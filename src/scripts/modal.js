@@ -11,14 +11,15 @@ function closePopup(popup) {
   setTimeout(() => {
     popup.classList.remove("popup_is-animated");
   }, 300);
-  document.removeEventListener("keydown", closeByEsc); // Удаление обработчика события
 }
-
 
 function closeByEsc(evt) {
   if (evt.key === "Escape") {
-    const openedPopup = document.querySelector(".popup_is-opened");
-    closePopup(openedPopup);
+    const popup = document.querySelector(".popup_is-opened");
+    if (popup) {
+      closePopup(popup);
+      document.removeEventListener("keydown", closeByEsc);
+    }
   }
 }
 
