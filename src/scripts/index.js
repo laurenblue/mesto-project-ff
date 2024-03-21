@@ -36,6 +36,7 @@ const editFormPopupButton = editForm.querySelector(".popup__button");
 const originalButton = editFormPopupButton.textContent;
 const caption = "Сохранение...";
 const newPlaceForm = addPopup.querySelector(".popup__form");
+const newPlacePopupButton = newPlaceForm.querySelector('.popup__button');
 const imagePopup = document.querySelector(".popup_type_image");
 const popupImage = imagePopup.querySelector(".popup__image");
 const popupCaption = imagePopup.querySelector(".popup__caption");
@@ -48,28 +49,6 @@ const placeNameInput = newPlaceForm.querySelector(
 function changeButtonCaption(buttonElement, caption) {
   buttonElement.textContent = caption;
 }
-
-/*editAvatarButton.addEventListener("click", () => {
-  openPopup(editAvatarPopup);
-  clearValidation(avatarForm, validationConfig);
-});
-
-avatarForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const avatarUrl = avatarForm.querySelector("#avatar").value;
-  changeButtonCaption(buttonAvatar, caption);
-  changeProfilePic(avatarUrl)
-    .then((userData) => {
-      console.log("Аватар успешно изменен:", userData);
-      closePopup(editAvatarPopup);
-    })
-    .catch((error) => {
-      console.error("Ошибка при смене аватара:", error);
-    })
-    .finally(() => {
-      changeButtonCaption(buttonAvatar, originalButton);
-    });
-});*/
 
 function renderCard(createCard) {
   contentContainer.prepend(createCard);
