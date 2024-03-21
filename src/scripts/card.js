@@ -21,32 +21,38 @@ function createCard(
   const deleteButton = templateElement.querySelector(".card__delete-button");
   if (cardData.owner._id === userId) {
     deleteButton.classList.add("card__delete-button_active");
-    deleteButton.addEventListener("click", () => handleDeleteCard(deleteButton, itemId, templateElement, removeCard));
+    deleteButton.addEventListener("click", () =>
+      handleDeleteCard(deleteButton, itemId, templateElement, removeCard)
+    );
   }
 
   const like = templateElement.querySelector(".card__like-button");
 
   const likeButton = () => {
-    const previousState = like.classList.contains("card__like-button_is-active");
-    handleLike(like);
-    if (previousState !== like.classList.contains("card__like-button_is-active")) {
-      if (previousState) {
-        hideLike(cardData._id)
-          .then((res) => {
-            likesContainer.textContent = res.likes.length;
-          })
-          .catch((err) => {
-            console.error(err);
-            handleLike(like); 
-          });
-      } else {
+    const previousState = like.classList.contains(
+      "card__like-button_is-active"
+    );
+
+    const newState = !previousState;
+
+    if (previousState !== newState) {
+      if (newState) {
         showLike(cardData._id)
           .then((res) => {
+            handleLike(like);
             likesContainer.textContent = res.likes.length;
           })
           .catch((err) => {
             console.error(err);
-            handleLike(like)
+          });
+      } else {
+        hideLike(cardData._id)
+          .then((res) => {
+            handleLike(like);
+            likesContainer.textContent = res.likes.length;
+          })
+          .catch((err) => {
+            console.error(err);
           });
       }
     }
@@ -80,7 +86,5 @@ function handleDeleteCard(button, itemId, templateElement, removeCard) {
       });
   });
 }
-
-
 
 export { createCard, handleDeleteCard, handleLike };
