@@ -110,7 +110,7 @@ function handleEditButtonClick() {
   openPopup(editPopup);
   nameInput.value = profileName.textContent;
   jobInput.value = profileDescription.textContent;
-  clearValidation(editPopup, validationConfig);
+  clearValidation(editForm, validationConfig);
   if (!validationEnabled) {
     validationEnabled = true;
   }
@@ -144,7 +144,7 @@ editForm.addEventListener("submit", updateProfile);
 function handleAddButtonClick() {
   openPopup(addPopup);
   newPlaceForm.reset();
-
+  clearValidation(newPlaceForm, validationConfig); 
   if (!validationEnabled) {
     validationEnabled = true;
   }
@@ -194,6 +194,7 @@ newPlaceForm.addEventListener("submit", handleNewPlaceFormSubmit);
 function handleEditAvatarClick() {
   openPopup(editAvatarPopup);
   avatarLink.value = "";
+  clearValidation(avatarForm, validationConfig); 
   if (!validationEnabled) {
     validationEnabled = true;
   }
@@ -208,6 +209,7 @@ function handleAvatarFormSubmit(event) {
   changeProfilePic(avatarUrl)
     .then((userData) => {
       console.log("Аватар успешно изменен:", userData);
+      profilePicture.style.backgroundImage = `url(${avatarUrl})`;
       closePopup(editAvatarPopup);
     })
     .catch((error) => {
