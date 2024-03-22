@@ -55,7 +55,9 @@ const placeNameInput = newPlaceForm.querySelector(
 /*descriptions, captions, images*/
 const profileName = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
-const originalButton = editFormPopupButton.textContent;
+const originalButtonEdit = editFormPopupButton.textContent;
+const originalButtonAdd = newPlacePopupButton.textContent;
+const originalButtonAvatar = buttonAvatar.textContent;
 const popupImage = imagePopup.querySelector(".popup__image");
 const popupCaption = imagePopup.querySelector(".popup__caption");
 const contentContainer = document.querySelector(".places__list");
@@ -132,7 +134,7 @@ function updateProfile(evt) {
       console.error("Ошибка при обновлении профиля:", error);
     })
     .finally(() => {
-      changeButtonCaption(editFormPopupButton, originalButton);
+      changeButtonCaption(editFormPopupButton, originalButtonEdit);
     });
 }
 
@@ -182,7 +184,7 @@ function handleNewPlaceFormSubmit(evt) {
       console.error("Ошибка при добавлении новой карточки:", error);
     })
     .finally(() => {
-      changeButtonCaption(newPlacePopupButton, originalButton);
+      changeButtonCaption(newPlacePopupButton, originalButtonAdd);
     });
 }
 
@@ -212,7 +214,7 @@ function handleAvatarFormSubmit(event) {
       console.error("Ошибка при смене аватара:", error);
     })
     .finally(() => {
-      changeButtonCaption(buttonAvatar, originalButton);
+      changeButtonCaption(buttonAvatar, originalButtonAvatar);
     });
 }
 
