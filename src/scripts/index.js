@@ -13,6 +13,17 @@ import {
   removeCard,
 } from "./api";
 
+export const validationConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__input-error_visible",
+};
+
+enableValidation(validationConfig);
+
 /*popups*/
 const editAvatarPopup = document.querySelector(".popup_type_avatar");
 const editPopup = document.querySelector(".popup_type_edit");
@@ -25,7 +36,7 @@ const newPlaceForm = addPopup.querySelector(".popup__form");
 const editForm = editPopup.querySelector(".popup__form");
 
 /*buttons*/
-const editAvatarButton = document.querySelector(".profile__edit-avatar");
+const editAvatarButton = document.querySelector(".profile__avatar-container");
 const buttonAvatar = avatarForm.querySelector(".popup__button");
 const editButton = document.querySelector(".profile__edit-button");
 const addButton = document.querySelector(".profile__add-button");
@@ -33,10 +44,8 @@ const editFormPopupButton = editForm.querySelector(".popup__button");
 const newPlacePopupButton = newPlaceForm.querySelector(".popup__button");
 
 /*inputs*/
-export const nameInput = document.querySelector(".popup__input_type_name");
-export const jobInput = document.querySelector(
-  ".popup__input_type_description"
-);
+const nameInput = document.querySelector(".popup__input_type_name");
+const jobInput = document.querySelector(".popup__input_type_description");
 const avatarLink = avatarForm.querySelector(".popup__input_type_avatar");
 const linkInput = newPlaceForm.querySelector(".popup__input_type_url");
 const placeNameInput = newPlaceForm.querySelector(
@@ -99,20 +108,13 @@ function handleEditButtonClick() {
   openPopup(editPopup);
   nameInput.value = profileName.textContent;
   jobInput.value = profileDescription.textContent;
+  clearValidation(editPopup, validationConfig);
   if (!validationEnabled) {
-    enableValidation(validationConfig);
     validationEnabled = true;
   }
 }
 
 editButton.addEventListener("click", handleEditButtonClick);
-
-editButton.addEventListener("click", () => {
-  openPopup(editPopup);
-  nameInput.value = profileName.textContent;
-  jobInput.value = profileDescription.textContent;
-  clearValidation(editPopup, validationConfig);
-});
 
 function updateProfile(evt) {
   evt.preventDefault();
@@ -142,7 +144,6 @@ function handleAddButtonClick() {
   newPlaceForm.reset();
 
   if (!validationEnabled) {
-    enableValidation(validationConfig);
     validationEnabled = true;
   }
 }
@@ -192,17 +193,11 @@ function handleEditAvatarClick() {
   openPopup(editAvatarPopup);
   avatarLink.value = "";
   if (!validationEnabled) {
-    enableValidation(validationConfig);
     validationEnabled = true;
   }
 }
 
 editAvatarButton.addEventListener("click", handleEditAvatarClick);
-
-editAvatarButton.addEventListener("click", () => {
-  openPopup(editAvatarPopup);
-  clearValidation(editAvatarPopup, validationConfig);
-});
 
 function handleAvatarFormSubmit(event) {
   event.preventDefault();
@@ -231,12 +226,3 @@ export function handlePictureClick(imageUrl, imageDescription) {
 
   openPopup(imagePopup);
 }
-
-export const validationConfig = {
-  formSelector: ".popup__form",
-  inputSelector: ".popup__input",
-  submitButtonSelector: ".popup__button",
-  inactiveButtonClass: "popup__button_disabled",
-  inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__input-error_visible",
-};
